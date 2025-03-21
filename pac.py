@@ -144,9 +144,19 @@ def move():
                 vector(0, 5),
                 vector(0, -5),
             ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
+            
+            # Filtrar direcciones válidas (evitar paredes)
+            valid_moves = [move for move in options if valid(point + move)]
+
+            if valid_moves:
+                # Elegir la dirección más cercana a Pac-Man
+                best_move = min(valid_moves, key=lambda move: abs((point + move) - pacman))
+                course.x = best_move.x
+                course.y = best_move.y
+            else:
+                # Si no hay movimientos válidos, mantener uno aleatorio
+                course.x, course.y = choice(options).x, choice(options).y
+            
 
         # Dibuja a los fantasmas
         up()
